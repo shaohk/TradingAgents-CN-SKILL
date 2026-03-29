@@ -200,6 +200,19 @@ allowed-tools: Agent, Read, Write, Glob, Bash, WebSearch, WebFetch
 
 **Agent：** 交易员: `~/.claude/skills/stock-analysis/prompts/trader.md`
 
+**⚠️ 数据获取要求（Phase 6 前必须完成）：**
+- 在启动交易员 Agent 前，必须通过 akshare 或 tushare 获取**最近一个交易日**的股票收盘价
+- 将此价格作为 Phase 6 上下文的一部分传递给交易员 Agent
+- 数据获取示例：
+```bash
+uv run python -c "
+import akshare as ak
+df = ak.stock_zh_a_spot_em()
+row = df[df['代码'] == '{{TICKER_CODE}}']
+print(row[['代码','名称','最新价','涨跌幅']].to_string())
+"
+```
+
 **完成后输出最终报告。**
 
 ---
